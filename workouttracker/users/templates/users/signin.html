@@ -1,16 +1,16 @@
 {% extends "tracker/base.html" %}
-{% load crispy_forms_tags %}
-{% block title %}Register{% endblock %}
+{% load widget_tweaks %}
+{% block title %}Sign In{% endblock %}
 {% block register_active %}active{% endblock %}
 {% block content %}
 <h1 class="center">
-  Register 
+  Welcome:
 </h1>
 <div class="row">
   <div class="col s6 offset-s3">
     <div class="card black">
       <div class="card-content red-text">
-        <h4 class="center red-text">Join Today:</h4>
+        <h4 class="center red-text">Sign In:</h4>
         <br>
         <form method="POST">
           {% csrf_token %}
@@ -33,36 +33,24 @@
           <fieldset class="form-group">
               <div class="row">
                 <div class="input-field col s12">
-                  {{ form.username}}
+                  {{ form.username|add_class:'white-text' }}
                   <label for="username" class="red-text">Username: </label>
                 </div>
               </div>
               <div class="row">
                 <div class="input-field col s12">
-                  {{ form.email }}
-                  <label for="email" class="red-text">Email: </label>
-                </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s12">
-                  {{ form.password1 }}
+                  {{ form.password|add_class:'white-text' }}
                   <label for="password1" class="red-text">Password: </label>
-                </div>
-              </div>
-              <div class="row">
-                <div class="input-field col s12">
-                  {{ form.password2 }}
-                  <label for="password2" class="red-text"> Confirm Password: </label>
                 </div>
               </div>
           </fieldset>
           <br>
           <div class="form-group center">
-            <button class="waves-effect waves-light btn black red-text" type="submit">Sign Up</button>
+            <button class="waves-effect waves-light btn black red-text" type="submit">Sign In</button>
           </div>
           <div class="center">
             <small class="text-muted center">
-              Already Have An Account? <a class="ml-2" href="{% url 'signin' %}">Sign In</a>
+              Don't Have An Account? <a class="ml-2" href="{% url 'register' %}">Sign Up</a>
             </small>
           </div>
         </form>

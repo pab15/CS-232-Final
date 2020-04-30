@@ -1,0 +1,52 @@
+{% extends "tracker/base.html" %}
+{% load widget_tweaks %}
+{% block title %}New Workout{% endblock %}
+{% block register_active %}active{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col s6 offset-s3">
+    <div class="card black">
+      <div class="card-content red-text">
+        <h1 class="center red-text">Create Workout</h1>
+        <br>
+        <form method="POST">
+          {% csrf_token %}
+          {% if form.errors %}
+            <div class="center">
+              <ul>
+                {% for field in form %}
+                  {% if field.errors %}
+                    {% for error in field.errors %}
+                      <li><a href="#id_{{ field.name }}" class="error red-text">- {{ error|escape }}</a></li>
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              </ul>
+              {% if form.non_field_errors %}
+                {{ form.non_field_errors }}
+              {% endif %}
+            </div>
+          {% endif %}
+          <fieldset class="form-group">
+            <div class="row">
+              <div class="input-field col s12">
+                {{ form.title|add_class:'white-text' }}
+                <label for="title" class="red-text">Title: </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-field col s12">
+                {{ form.content|add_class:'materialize-textarea white-text' }}
+                <label for="content" class="red-text">Exercises: </label>
+              </div>
+            </div>
+          </fieldset>
+          <br>
+          <div class="form-group center">
+            <button class="waves-effect waves-light btn black red-text" type="submit">Create Workout</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

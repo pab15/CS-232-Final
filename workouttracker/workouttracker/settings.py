@@ -33,6 +33,9 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'tracker.apps.TrackerConfig',
     'users.apps.UsersConfig',
+    'crispy_forms',
+    'crispy_forms_materialize',
+    'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -120,3 +123,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CRISPY_TEMPLATE_PACK = 'materialize_css_forms'
+
+LOGIN_REDIRECT_URL = 'users-feed'
+
+LOGIN_URL = 'signin'

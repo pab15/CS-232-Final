@@ -14,21 +14,35 @@
                     <a href="#" class="brand-logo red-text">Workout Tracker</a>
                     <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="material-icons">menu</i></a>
                     <ul class="right hide-on-med-and-down" id="navList">
-                        <li class="{% block home_active %}{% endblock %}"><a class="white-text" href="{% url 'tracker-home' %}">Home</a></li>
-                        <li class="{% block about_active %}{% endblock %}"><a class="white-text" href="{% url 'tracker-about' %}">About</a></li>
-                        <li class="{% block signin_active %}{% endblock %}"><a class="white-text" href="{% url 'tracker-signin' %}">Sign In</a></li>
-                        <li class="{% block register_active %}{% endblock %}"><a class="white-text" href="{% url 'register' %}">Register</a></li>
+                        {% if user.is_authenticated %}
+                          <li class="{% block feed_active %}{% endblock %}"><a class="white-text" href="{% url 'users-feed' %}">Feed</a></li>
+                          <li class="{% block profile_active %}{% endblock %}"><a class="white-text" href="{% url 'profile' %}">Profile</a></li>
+                          <li class="{% block signout_active %}{% endblock %}"><a class="white-text" href="{% url 'signout' %}">Sign Out</a></li>
+                        {% else %}
+                          <li class="{% block home_active %}{% endblock %}"><a class="white-text" href="{% url 'tracker-home' %}">Home</a></li>
+                          <li class="{% block about_active %}{% endblock %}"><a class="white-text" href="{% url 'tracker-about' %}">About</a></li>
+                          <li class="{% block signin_active %}{% endblock %}"><a class="white-text" href="{% url 'signin' %}">Sign In</a></li>
+                          <li class="{% block register_active %}{% endblock %}"><a class="white-text" href="{% url 'register' %}">Register</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
         </nav>
     </div>
-    <ul class="sidenav black" id="mobile-demo">
-      <li><a href="{% url 'tracker-home' %}" class="white-text">Home</a></li>
-      <li><a href="{% url 'tracker-about' %}" class="white-text">About</a></li>
-      <li><a href="{% url 'tracker-signin' %}" class="white-text">Sign In</a></li>
-      <li><a href="{% url 'register' %}" class="white-text">Register</a></li>
-    </ul>
+    {% if user.is_authenticated %}
+      <ul class="sidenav black" id="mobile-demo">
+        <li><a href="{% url 'users-feed' %}" class="white-text">Feed</a></li>
+        <li><a href="{% url 'profile' %}" class="white-text">About</a></li>
+        <li><a href="{% url 'signout' %}" class="white-text">Sign Out</a></li>
+      </ul>
+    {% else %}
+      <ul class="sidenav black" id="mobile-demo">
+        <li><a href="{% url 'tracker-home' %}" class="white-text">Home</a></li>
+        <li><a href="{% url 'tracker-about' %}" class="white-text">About</a></li>
+        <li><a href="{% url 'signin' %}" class="white-text">Sign In</a></li>
+        <li><a href="{% url 'register' %}" class="white-text">Register</a></li>
+      </ul>
+    {% endif %}
     <div class="row">
       <div class="col s6 offset-s3">
         {% if messages %}

@@ -1,0 +1,7 @@
+{% extends "tracker/base.html" %}
+{% load widget_tweaks %}
+{% block title %}Profile{% endblock %}
+{% block profile_active %}active{% endblock %}
+{% block content %}
+  <h1 class="center">{{ user.username }}</h1>
+{% endblock %}
