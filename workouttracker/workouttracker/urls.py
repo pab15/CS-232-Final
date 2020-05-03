@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', user_views.register, name='register'),
     path('profile/', user_views.profile, name='profile'),
+    path('profile-update/', user_views.profile_update, name='profile-update'),
     # path('feed/', WorkoutListView.as_view(), name='feed'),
     path('signin/', auth_views.LoginView.as_view(template_name='users/signin.html'), name='signin'),
     path('signout/', auth_views.LogoutView.as_view(template_name='users/signout.html'), name='signout'),

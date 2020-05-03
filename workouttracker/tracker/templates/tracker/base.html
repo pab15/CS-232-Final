@@ -16,6 +16,7 @@
                     <ul class="right hide-on-med-and-down" id="navList">
                         {% if user.is_authenticated %}
                           <li class="{% block feed_active %}{% endblock %}"><a class="white-text" href="{% url 'users-feed' %}">Feed</a></li>
+                          <li class=""><a class="white-text" href="{% url 'workout-create' %}">New Post</a></li>
                           <li class="{% block profile_active %}{% endblock %}"><a class="white-text" href="{% url 'profile' %}">Profile</a></li>
                           <li class="{% block signout_active %}{% endblock %}"><a class="white-text" href="{% url 'signout' %}">Sign Out</a></li>
                         {% else %}
@@ -32,6 +33,7 @@
     {% if user.is_authenticated %}
       <ul class="sidenav black" id="mobile-demo">
         <li><a href="{% url 'users-feed' %}" class="white-text">Feed</a></li>
+        <li><a href="{% url 'workout-create' %}" class="white-text">New Post</a></li>
         <li><a href="{% url 'profile' %}" class="white-text">About</a></li>
         <li><a href="{% url 'signout' %}" class="white-text">Sign Out</a></li>
       </ul>

@@ -43,7 +43,8 @@
           </fieldset>
           <br>
           <div class="form-group center">
-            <button class="waves-effect waves-light btn black red-text" type="submit">Edit Workout</button>
+            <button class="waves-effect waves-light btn black red-text" type="submit"><i class="material-icons left">edit</i>Edit Workout</button>
+            <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-full' object.id %}"><i class="material-icons left">subdirectory_arrow_left</i>Back</a>
           </div>
         </form>
     </div>

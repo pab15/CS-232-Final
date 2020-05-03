@@ -3,11 +3,13 @@
   Feed
 {% endblock %}
 {% block content %}
-  <center>
-    <h1>
-      Feed
-    </h1>
-  </center>
+  <h1 class="center">
+    Feed
+  </h1>
+  <div class="center">
+    <a href="{% url 'workout-create' %}" class="waves-effect waves-light btn-floating black btn-large z-depth-5"><i class="large material-icons">add</i></a>
+  </div>
+  <br>
   {% for post in posts %}
     <div class="container center">
       <div class="row">
@@ -19,19 +21,24 @@
               <p class="truncate white-text">{{ post.content}}</p>
             </div>
             <div class="card-action center">
-              <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-full' post.id %}"><i class="material-icons left">view_headline</i> View</a>
-              <a class="waves-effect waves-light btn black red-text"><i class="material-icons left">add</i> Save</a>
-              <a class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_up</i> Like</a>
-              <a class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_down</i> Dislike</a>
+              {% if post.author == user %}
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-full' post.id %}"><i class="material-icons left">view_headline</i> View</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-update' post.id %}"><i class="material-icons left">mode_edit</i>Edit</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-delete' post.id %}"><i class="material-icons left">delete</i>Delete</a>
+                <p class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_up</i> {{ post.likes }}</p>
+                <p class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_down</i> {{ post.dislikes }}</p>
+              {% else %}
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-full' post.id %}"><i class="material-icons left">view_headline</i> View</a>
+                <a class="waves-effect waves-light btn black red-text"><i class="material-icons left">add</i> Save</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-like' post.id %}"><i class="material-icons left">thumb_up</i> {{ post.likes }}</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-dislike' post.id %}"><i class="material-icons left">thumb_down</i> {{ post.dislikes }}</a>
+              {% endif %}
             </div>
           </div>
         </div>
       </div>
     </div>
   {% endfor %}
-  <div class="center">
-    <a href="{% url 'workout-create' %}" class="waves-effect waves-light btn-floating black btn-large z-depth-5"><i class="large material-icons">add</i></a>
-  </div>
   <br>
   <br>
 {% endblock %}

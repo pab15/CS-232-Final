@@ -18,14 +18,20 @@
               </p>
             {% endfor %}
           </div>
+          <br>
         </div>
         <div class="card-action center">
           {% if object.author == user %}
-            <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-update' object.id %}"><i class="material-icons left">mode_edit</i>Edit</a>
+              <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-update' object.id %}"><i class="material-icons left">mode_edit</i>Edit</a>
+              <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-delete' object.id %}"><i class="material-icons left">delete</i>Delete</a>
+              <a class="waves-effect waves-light btn black red-text" href="{% url 'users-feed' %}"><i class="material-icons left">subdirectory_arrow_left</i>Feed</a>
+              <p class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_up</i> {{ object.likes }}</p>
+              <p class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_down</i> {{ object.dislikes }}</p>
           {% else %}
-            <a class="waves-effect waves-light btn black red-text"><i class="material-icons left">add</i> Save</a>
-            <a class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_up</i> Like</a>
-            <a class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_down</i> Dislike</a>
+              <a class="waves-effect waves-light btn black red-text"><i class="material-icons left">add</i> Save</a>
+              <a class="waves-effect waves-light btn black red-text" href="{% url 'users-feed' %}"><i class="material-icons left">subdirectory_arrow_left</i>Feed</a>
+              <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-like' object.id %}"><i class="material-icons left">thumb_up</i> {{ object.likes }}</a>
+              <a class="waves-effect waves-light btn black red-text"  href="{% url 'workout-dislike' object.id %}"><i class="material-icons left">thumb_down</i> {{ object.dislikes }}</a>
           {% endif %}
         </div>
       </div>
