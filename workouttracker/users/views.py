@@ -107,12 +107,26 @@ class LikeRedirectView(RedirectView):
         new_like.save()
         workout.save()
       else:
-        if action.liked == False:
+        if action.liked == True and action.disliked == False:
+          action.disliked = False
+          action.liked = False
+          workout = Workouts.objects.get(pk=pk)
+          workout.likes = workout.likes - 1
+          action.save()
+          workout.save()
+        elif action.liked == False and action.disliked == True:
           action.disliked = False
           action.liked = True
           workout = Workouts.objects.get(pk=pk)
           workout.likes = workout.likes + 1
           workout.dislikes = workout.dislikes - 1
+          action.save()
+          workout.save()
+        elif action.liked == False and action.disliked == False:
+          action.disliked = False
+          action.liked = True
+          workout = Workouts.objects.get(pk=pk)
+          workout.likes = workout.likes + 1
           action.save()
           workout.save()
     url = f'/workout/{pk}/'
@@ -143,11 +157,25 @@ class DislikeRedirectView(RedirectView):
         new_like.save()
         workout.save()
       else:
-        if action.disliked == False:
+        if action.disliked == True and action.liked == False:
+          action.disliked = False
+          action.liked = False
+          workout = Workouts.objects.get(pk=pk)
+          workout.dislikes = workout.dislikes - 1
+          action.save()
+          workout.save()
+        elif action.disliked == False and action.liked == True:
           action.disliked = True
           action.liked = False
           workout = Workouts.objects.get(pk=pk)
           workout.likes = workout.likes - 1
+          workout.dislikes = workout.dislikes + 1
+          action.save()
+          workout.save()
+        elif action.disliked == False and action.liked == False:
+          action.disliked = True
+          action.liked = False
+          workout = Workouts.objects.get(pk=pk)
           workout.dislikes = workout.dislikes + 1
           action.save()
           workout.save()

@@ -8,6 +8,12 @@
       <div class="card-content red-text">
         <h1 class="center red-text">Confirm Delete</h1>
         <br>
+        <h4 class="center red-text">Post:</h4>
+        <p class="center white-text">{{ object.title }}</p>
+        <h4 class="center red-text">Content:</h4>
+        <p class="center white-text">{{ object.content }}</p>
+        <br>
+        <br>
         <form method="POST">
           {% csrf_token %}
           <div class="card-action center">
