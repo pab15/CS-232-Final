@@ -1,5 +1,5 @@
-from .models import Workouts, Action
 from django.contrib import messages
+from .models import Workouts, Action, SavedPost
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -181,3 +181,41 @@ class DislikeRedirectView(RedirectView):
           workout.save()
     url = f'/workout/{pk}/'
     return url
+
+class SaveRedirectView(RedirectView):
+  model = Workouts
+  is_permanent = True
+  def get_redirect_url(self, *args, **kwargs):
+    pk = self.kwargs['pk']
+    print(Workouts.objects.get(pk=pk).author)
+    print(self.request.user)
+    print(self.request.user == Workouts.objects.get(pk=pk).author)
+    if self.request.user != Workouts.objects.get(pk=pk).author:
+      try:
+        print('entered try')
+        saved_post = SavedPost.objects.get(user_saving=self.request.user, post_saved=Workouts.objects.get(pk=pk))
+        saved_post.delete()
+        url = f'/workout/{pk}/'
+        return url
+      except:
+        print('entered except')
+        new_save = SavedPost(user_saving=self.request.user, post_saved=Workouts.objects.get(pk=pk))
+        new_save.save()
+        url = f'/workout/{pk}/'
+        return url
+
+class MyPostListView(ListView):
+  model = Workouts
+  template_name = 'users/myposts.html'
+  context_object_name = 'posts'
+  ordering = ['-date_posted']
+
+class MySavesListView(ListView):
+  model = SavedPost
+  template_name = 'users/savedposts.html'
+  context_object_name = 'saved'
+
+class LikedListView(ListView):
+  model = Action
+  template_name = 'users/mylikes.html'
+  context_object_name = 'actions'

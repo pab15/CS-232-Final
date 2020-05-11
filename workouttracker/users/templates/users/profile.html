@@ -15,9 +15,9 @@
             <p class="white-text">{{ user.profile.bio }}</p>
           </div>
           <div class="card-action center">
-            <a class="waves-effect waves-light btn black red-text"><i class="material-icons left">view_headline</i> My Posts</a>
-            <a class="waves-effect waves-light btn black red-text center"><i class="material-icons left">add</i> Saved Posts</a>
-            <a class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_up</i> Liked Posts</a>
+            <a class="waves-effect waves-light btn black red-text" href="{% url 'users-myposts' %}"><i class="material-icons left">view_headline</i> My Posts</a>
+            <a class="waves-effect waves-light btn black red-text center" href="{% url 'users-mysaves' %}"><i class="material-icons left">add</i> Saved Posts</a>
+            <a class="waves-effect waves-light btn black red-text" href="{% url 'users-mylikes' %}"><i class="material-icons left">thumb_up</i> Liked Posts</a>
           </div>
           <div class="card-action center">
             <a class="waves-effect waves-light btn black red-text" href="{% url 'profile-update' %}"><i class="material-icons left">edit</i>Update Profile</a>

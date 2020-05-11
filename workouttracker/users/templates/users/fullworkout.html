@@ -28,7 +28,7 @@
               <p class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_up</i> {{ object.likes }}</p>
               <p class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_down</i> {{ object.dislikes }}</p>
           {% else %}
-              <a class="waves-effect waves-light btn black red-text"><i class="material-icons left">add</i> Save</a>
+              <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-save' object.id %}"><i class="material-icons left">add</i> Save</a>
               <a class="waves-effect waves-light btn black red-text" href="{% url 'users-feed' %}"><i class="material-icons left">subdirectory_arrow_left</i>Feed</a>
               <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-like' object.id %}"><i class="material-icons left">thumb_up</i> {{ object.likes }}</a>
               <a class="waves-effect waves-light btn black red-text"  href="{% url 'workout-dislike' object.id %}"><i class="material-icons left">thumb_down</i> {{ object.dislikes }}</a>

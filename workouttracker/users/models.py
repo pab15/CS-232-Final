@@ -31,7 +31,7 @@ class Action(models.Model):
   disliked = models.BooleanField()
 
 class SavedPost(models.Model):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
+  user_saving = models.ForeignKey(User, on_delete=models.CASCADE)
   post_saved = models.ForeignKey(Workouts, on_delete=models.CASCADE)
 
 class Comments(models.Model):

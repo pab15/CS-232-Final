@@ -1,0 +1,41 @@
+{% extends "tracker/base.html" %}
+{% block title %}
+  My Workouts
+{% endblock %}
+{% block content %}
+  <h1 class="center">
+    My Workouts
+  </h1>
+  <div class="center">
+    <a href="{% url 'workout-create' %}" class="waves-effect waves-light btn-floating black btn-large z-depth-5"><i class="large material-icons">add</i></a>
+  </div>
+  <br>
+  {% for post in posts %}
+    {% if post.author == user %}
+      <div class="container center">
+        <div class="row">
+          <div class="col s6 offset-s3">
+            <div class="card black z-depth-5">
+              <div class="card-content">
+                <span class="card-title center red-text">{{ post.title }}</span>
+                <p class="white-text">By <a href="" class="red-text">{{ post.author }}</a> on {{ post.date_posted|date:"F d, Y" }}</p>
+                <p class="truncate white-text">{{ post.content}}</p>
+              </div>
+              <div class="card-action center">
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-full' post.id %}"><i class="material-icons left">view_headline</i> View</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-update' post.id %}"><i class="material-icons left">mode_edit</i>Edit</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-delete' post.id %}"><i class="material-icons left">delete</i>Delete</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'profile' %}"><i class="material-icons left">subdirectory_arrow_left</i>Profile</a>
+                <br>
+                <p class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_up</i> {{ post.likes }}</p>
+                <p class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_down</i> {{ post.dislikes }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+  <br>
+  <br>
+{% endblock %}
