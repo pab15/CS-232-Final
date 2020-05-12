@@ -1,11 +1,11 @@
 from django.contrib import messages
-from .models import Workouts, Action, SavedPost
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from .models import Workouts, Action, SavedPost, Comments
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView, FormView
 
 def register(request):
   if request.method == 'POST':
@@ -48,9 +48,34 @@ class WorkoutListView(ListView):
   context_object_name = 'posts'
   ordering = ['-date_posted']
 
-class WorkoutDetailView(DetailView):
+class WorkoutDetailView(FormView, DetailView):
   model = Workouts
+  form_class = CommentForm
   template_name = 'users/fullworkout.html'
+  success_url = ''
+  fields = ['comment']
+
+  def get_context_data(self, **kwargs):
+    pk = self.kwargs['pk']
+    context = super().get_context_data(**kwargs)
+    context['comments'] = Comments.objects.filter(post_commented=Workouts.objects.get(pk=pk))
+    context['form'] = self.get_form()
+    return context
+
+  def form_valid(self, form, **kwargs):
+    pk = self.kwargs['pk']
+    form.instance.user_commenting = self.request.user
+    form.instance.post_commented = Workouts.objects.get(pk=pk)
+    return super().form_valid(form)
+
+  def post(self, request, *args, **kwargs):
+    pk = self.kwargs['pk']
+    self.get_url()
+    return FormView.post(self, request, user_commenting=self.request.user, post_commented=Workouts.objects.get(pk=pk))
+
+  def get_url(self, **kwargs):
+    pk = self.kwargs['pk']
+    self.success_url = f'/workout/{pk}/'
 
 class WorkoutCreateView(CreateView):
   model = Workouts
@@ -131,13 +156,6 @@ class LikeRedirectView(RedirectView):
           workout.save()
     url = f'/workout/{pk}/'
     return url
-
-  # def test_func(self):
-  #   workout = self.get_object()
-  #   if self.request.user != workout.author:
-  #     return True
-  #   else:
-  #     return False
 
 class DislikeRedirectView(RedirectView):
   model = Workouts
