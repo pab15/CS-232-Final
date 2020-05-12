@@ -2,7 +2,7 @@ from . import views
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
-from .views import WorkoutListView, WorkoutDetailView, WorkoutCreateView, WorkoutUpdateView, WorkoutDeleteView, LikeRedirectView, DislikeRedirectView, MyPostListView, SaveRedirectView, MySavesListView, LikedListView, CommentFormView, UserDetailView, UserPostListView
+from .views import WorkoutListView, WorkoutDetailView, WorkoutCreateView, WorkoutUpdateView, WorkoutDeleteView, LikeRedirectView, DislikeRedirectView, MyPostListView, SaveRedirectView, MySavesListView, LikedListView, CommentFormView, UserDetailView, UserPostListView, UserSaveListView, UserLikeListView
 
 urlpatterns = [
     path('feed/', login_required(WorkoutListView.as_view()), name='users-feed'),
@@ -18,4 +18,6 @@ urlpatterns = [
     path('workout/<pk>/delete/', login_required(WorkoutDeleteView.as_view()), name='workout-delete'),
     path('user/<pk>/', login_required(UserDetailView.as_view()), name='user-view'),
     path('user/<pk>/posts', login_required(UserPostListView.as_view()), name='users-userposts'),
+    path('user/<pk>/saves', login_required(UserSaveListView.as_view()), name='users-usersaves'),
+    path('user/<pk>/likes', login_required(UserLikeListView.as_view()), name='users-userlikes'),
 ]

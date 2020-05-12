@@ -1,0 +1,43 @@
+{% extends "tracker/base.html" %}
+{% block title %}
+  Saved Workouts
+{% endblock %}
+{% block content %}
+  <h1 class="center">
+    {{ username }} Saved Workouts
+  </h1>
+  <br>
+  {% for save in saved %}
+    <div class="container center">
+      <div class="row">
+        <div class="col s6 offset-s3">
+          <div class="card black z-depth-5">
+            <div class="card-content">
+              <span class="card-title center red-text">{{ save.post_saved.title }}</span>
+              <p class="white-text">By <a href="" class="red-text">{{ save.post_saved.author }}</a> on {{ save.post_saved.date_posted|date:"F d, Y" }}</p>
+              <p class="truncate white-text">{{ save.post_saved.content}}</p>
+            </div>
+            <div class="card-action center">
+              {% if save.post_saved.author == user %}
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-full' save.post_saved.id %}"><i class="material-icons left">view_headline</i> View</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-update' save.post_saved.id %}"><i class="material-icons left">mode_edit</i>Edit</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-delete' save.post_saved.id %}"><i class="material-icons left">delete</i>Delete</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'user-view' save.post_saved.author.id %}"><i class="material-icons left">subdirectory_arrow_left</i>User Profile</a>
+                <br>
+                <p class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_up</i> {{ save.post_saved.likes }}</p>
+                <p class="waves-effect waves-light btn black red-text"><i class="material-icons left">thumb_down</i> {{ save.post_saved.dislikes }}</p>
+              {% else %}
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-full' save.post_saved.id %}"><i class="material-icons left">view_headline</i> View</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-save' save.post_saved.id %}"><i class="material-icons left">add</i> Save</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-like' save.post_saved.id %}"><i class="material-icons left">thumb_up</i> {{ save.post_saved.likes }}</a>
+                <a class="waves-effect waves-light btn black red-text" href="{% url 'workout-dislike' save.post_saved.id %}"><i class="material-icons left">thumb_down</i> {{ save.post_saved.dislikes }}</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  <br>
+  <br>
+{% endblock %}

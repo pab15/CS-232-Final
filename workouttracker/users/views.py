@@ -271,3 +271,29 @@ class UserPostListView(ListView):
     user_posted = User.objects.get(id=pk)
     context['posts'] = Workouts.objects.filter(author=user_posted)
     return context
+
+class UserSaveListView(ListView):
+  model = SavedPost
+  template_name = 'users/usersavedposts.html'
+  ordering = ['-date_posted']
+
+  def get_context_data(self, **kwargs):
+    pk = self.kwargs['pk']
+    context = super(UserSaveListView, self).get_context_data(**kwargs)
+    user_posted = User.objects.get(id=pk)
+    context['saved'] = SavedPost.objects.filter(user_saving=user_posted)
+    context['username'] = user_posted.username
+    return context
+
+class UserLikeListView(ListView):
+  model = Action
+  template_name = 'users/userlikedposts.html'
+  ordering = ['-date_posted']
+
+  def get_context_data(self, **kwargs):
+    pk = self.kwargs['pk']
+    context = super(UserLikeListView, self).get_context_data(**kwargs)
+    user_liking = User.objects.get(id=pk)
+    context['actions'] = Action.objects.filter(user_liking=user_liking)
+    context['username'] = user_liking.username
+    return context
