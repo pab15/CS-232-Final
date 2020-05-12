@@ -1,8 +1,9 @@
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from .models import Workouts, Action, SavedPost, Comments
 from django.contrib.auth.mixins import UserPassesTestMixin
+from .models import Workouts, Action, SavedPost, Comments, Profile
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, CommentForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView, FormView
@@ -48,30 +49,37 @@ class WorkoutListView(ListView):
   context_object_name = 'posts'
   ordering = ['-date_posted']
 
-class WorkoutDetailView(FormView, DetailView):
+class WorkoutDetailView(DetailView):
   model = Workouts
-  form_class = CommentForm
   template_name = 'users/fullworkout.html'
   success_url = ''
   fields = ['comment']
 
-  def get_context_data(self, **kwargs):
-    pk = self.kwargs['pk']
-    context = super().get_context_data(**kwargs)
-    context['comments'] = Comments.objects.filter(post_commented=Workouts.objects.get(pk=pk))
-    context['form'] = self.get_form()
-    return context
+  # def form_valid(self, form, **kwargs):
+  #   pk = self.kwargs['pk']
+  #   form.instance.user_commenting = self.request.user
+  #   form.instance.post_commented = Workouts.objects.get(pk=pk)
+  #   return super().form_valid(form)
 
-  def form_valid(self, form, **kwargs):
-    pk = self.kwargs['pk']
-    form.instance.user_commenting = self.request.user
-    form.instance.post_commented = Workouts.objects.get(pk=pk)
-    return super().form_valid(form)
+  # def post(self, request, *args, **kwargs):
+  #   pk = self.kwargs['pk']
+  #   self.get_url()
+  #   return FormView.post(self, request, user_commenting=self.request.user, post_commented=Workouts.objects.get(pk=pk))
 
-  def post(self, request, *args, **kwargs):
-    pk = self.kwargs['pk']
-    self.get_url()
-    return FormView.post(self, request, user_commenting=self.request.user, post_commented=Workouts.objects.get(pk=pk))
+  # def get_url(self, **kwargs):
+  #   pk = self.kwargs['pk']
+  #   self.success_url = f'/workout/{pk}/'
+
+  # def get_context_data(self, **kwargs):
+  #   pk = self.kwargs['pk']
+  #   context = super(WorkoutDetailView, self).get_context_data(**kwargs)
+  #   context['comments'] = Comments.objects.filter(post_commented=Workouts.objects.get(pk=pk))
+  #   context['form'] = CommentForm
+  #   return context
+
+class CommentFormView(FormView):
+  form_class = CommentForm
+  success_url = ''
 
   def get_url(self, **kwargs):
     pk = self.kwargs['pk']
@@ -237,3 +245,29 @@ class LikedListView(ListView):
   model = Action
   template_name = 'users/mylikes.html'
   context_object_name = 'actions'
+
+class UserDetailView(DetailView):
+  model = User
+  template_name = 'users/userview.html'
+  
+  def get_context_data(self, **kwargs):
+    pk = self.kwargs['pk']
+    context = super(UserDetailView, self).get_context_data(**kwargs)
+    users = User.objects.all()
+    for user in users:
+      print(user.id)
+      print(User.objects.get(username=User.objects.get(id=user.id)))
+    context['user'] = User.objects.get(username=User.objects.get(id=pk))
+    return context
+
+class UserPostListView(ListView):
+  model = Workouts
+  template_name = 'users/userposts.html'
+  ordering = ['-date_posted']
+
+  def get_context_data(self, **kwargs):
+    pk = self.kwargs['pk']
+    context = super(UserPostListView, self).get_context_data(**kwargs)
+    user_posted = User.objects.get(id=pk)
+    context['posts'] = Workouts.objects.filter(author=user_posted)
+    return context

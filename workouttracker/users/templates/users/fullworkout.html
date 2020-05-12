@@ -10,7 +10,7 @@
       <div class="card black z-depth-5">
         <div class="card-content">
           <h1 class="center red-text">{{ object.title }}</h1>
-          <p class="white-text">By <a href="" class="red-text">{{ object.author }}</a> on {{ object.date_posted|date:"F d, Y" }}</p>
+          <p class="white-text">By <a href="{% url 'user-view' object.author.id %}" class="red-text">{{ object.author }}</a> on {{ object.date_posted|date:"F d, Y" }}</p>
           <br>
           <div class="white-text">
             {% for line in object.content.splitlines %}
