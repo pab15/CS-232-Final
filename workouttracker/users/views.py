@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.views.generic.edit import FormMixin
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -49,33 +50,39 @@ class WorkoutListView(ListView):
   context_object_name = 'posts'
   ordering = ['-date_posted']
 
-class WorkoutDetailView(DetailView):
+class WorkoutDetailView(FormMixin, DetailView):
   model = Workouts
+  form_class = CommentForm
   template_name = 'users/fullworkout.html'
   success_url = ''
   fields = ['comment']
 
-  # def form_valid(self, form, **kwargs):
-  #   pk = self.kwargs['pk']
-  #   form.instance.user_commenting = self.request.user
-  #   form.instance.post_commented = Workouts.objects.get(pk=pk)
-  #   return super().form_valid(form)
+  def post(self, request, *args, **kwargs):
+    self.get_url()
+    self.object = self.get_object()
+    form = self.get_form()
+    if form.is_valid():
+        return self.form_valid(form)
+    else:
+        return self.form_invalid(form)
 
-  # def post(self, request, *args, **kwargs):
-  #   pk = self.kwargs['pk']
-  #   self.get_url()
-  #   return FormView.post(self, request, user_commenting=self.request.user, post_commented=Workouts.objects.get(pk=pk))
+  def form_valid(self, form, **kwargs):
+    pk = self.kwargs['pk']
+    form.instance.user_commenting = self.request.user
+    form.instance.post_commented = Workouts.objects.get(pk=pk)
+    form.save()
+    return super(WorkoutDetailView, self).form_valid(form)
 
-  # def get_url(self, **kwargs):
-  #   pk = self.kwargs['pk']
-  #   self.success_url = f'/workout/{pk}/'
+  def get_url(self, **kwargs):
+    pk = self.kwargs['pk']
+    self.success_url = f'/workout/{pk}/'
 
-  # def get_context_data(self, **kwargs):
-  #   pk = self.kwargs['pk']
-  #   context = super(WorkoutDetailView, self).get_context_data(**kwargs)
-  #   context['comments'] = Comments.objects.filter(post_commented=Workouts.objects.get(pk=pk))
-  #   context['form'] = CommentForm
-  #   return context
+  def get_context_data(self, **kwargs):
+    pk = self.kwargs['pk']
+    context = super(WorkoutDetailView, self).get_context_data(**kwargs)
+    context['comments'] = Comments.objects.filter(post_commented=Workouts.objects.get(pk=pk))
+    context['form'] = CommentForm
+    return context
 
 class CommentFormView(FormView):
   form_class = CommentForm
