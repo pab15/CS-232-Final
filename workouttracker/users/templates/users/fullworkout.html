@@ -84,7 +84,7 @@
         
           {% for comment in comments %}
             <div class="card-action center">
-              <p class="white-text">By <a href="" class="red-text">{{ comment.user_commenting }}</a>on {{ comment.date_posted|date:"F d, Y" }}</p>
+              <p class="white-text">By <a href="{% url 'user-view' comment.user_commenting.id %}" class="red-text">{{ comment.user_commenting }}</a>on {{ comment.date_posted|date:"F d, Y" }}</p>
               <br>
               <p class="white-text">
                 {{ comment.comment }}
